@@ -4,10 +4,11 @@
   "description": "Image editor library",
   "main": "index.js",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/cataas/image-editor.git"
+    "type": "git",
+    "url": "https://github.com/cataas/image-editor.git"
   },
   "dependencies": {
+    "gm": "^1.23.0",
     "jimp": "^0.2.28",
     "yion": "^1.0.0"
   },
