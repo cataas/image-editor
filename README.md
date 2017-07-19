@@ -5,10 +5,12 @@ A image editor library
 ## Example
 
 ```javascript
-fs.readFile('my-file.png', 'utf-8', (err, buffer) => {
-    imageEditor.edit(buffer, 'image/png', 'square', 'Hello')
-        .then(buffer => fs.writeFile('output.png', buffer));
-});
+const ie = require('image-editor');
+
+ie.readFile('./input.png')
+    .then(buffer => ie.edit(buffer, 'image/png', 'square', 'Hello'))
+    .then(buffer => ie.writeFile(buffer, './output.png'))
+    .then(() => console.log('Done'));
 ```
 
 # API Reference
@@ -17,6 +19,8 @@ fs.readFile('my-file.png', 'utf-8', (err, buffer) => {
 
 * ImageEditor
     * ImageEditor#edit(buffer, mimetype, [type], [text], [color], [fontSize], [filter], [customWidth], [customHeight]) => <code>Promise</code>
+    * ImageEditor#readFile(path) => <code>Promise</code>
+    * ImageEditor#writeFile(buffer, path) => <code>Promise</code>
     * ImageEditor#applyType(buffer, mimetype, [type], [customWidth], [customHeight]) => <code>Promise</code>
     * ImageEditor#applyFilter(buffer, mimetype, filter) => <code>Promise</code>
     * ImageEditor#size(buffer) => <code>Promise</code>
@@ -47,6 +51,25 @@ Edit an image
 | [filter] | <code>string</code> | <code>null</code> |
 | [customWidth] | <code>number</code> | <code></code> |
 | [customHeight] | <code>number</code> | <code></code> |
+
+### ImageEditor#readFile(path) => <code>Promise</code>
+Read file and return buffer
+
+**Kind**: Exported function  
+
+| Param | Type |
+| --- | --- |
+| path | <code>string</code> |
+
+### ImageEditor#writeFile(buffer, path) => <code>Promise</code>
+Write file from buffer to path
+
+**Kind**: Exported function  
+
+| Param | Type |
+| --- | --- |
+| buffer | <code>Buffer</code> |
+| path | <code>string</code> |
 
 ### ImageEditor#applyType(buffer, mimetype, [type], [customWidth], [customHeight]) => <code>Promise</code>
 Apply type

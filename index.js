@@ -4,13 +4,12 @@ const jimp = require('jimp');
 /**
  * @module ImageEditor
  * @example
- * const fs = require('fs');
- * const imageEditor = require('image-editor');
+ * const ie = require('image-editor');
  *
- * fs.readFile('my-file.png', 'utf-8', (err, buffer) => {
- *     imageEditor.edit(buffer, 'image/png', 'square', 'Hello')
- *         .then(buffer => {});
- * });
+ * ie.readFile('./input.png')
+ *    .then(buffer => ie.edit(buffer, 'image/png', 'square', 'Hello'))
+ *    .then(buffer => ie.writeFile(buffer, './output.png'))
+ *    .then(() => console.log('Done'));
  */
 class ImageEditor {
 
@@ -45,6 +44,47 @@ class ImageEditor {
             })
             .catch(err => console.log(err))
         ;
+    }
+
+    /**
+     * Read file and return buffer
+     * @param {string} path
+     *
+     * @returns {Promise}
+     *
+     * @alias module:ImageEditor
+     */
+    readFile(path) {
+        return new Promise((resolve, reject) => {
+            gm(path).toBuffer((err, buffer) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(buffer);
+                }
+            });
+        });
+    }
+
+    /**
+     * Write file from buffer to path
+     * @param {Buffer} buffer
+     * @param {string} path
+     *
+     * @returns {Promise}
+     *
+     * @alias module:ImageEditor
+     */
+    writeFile(buffer, path) {
+        return new Promise((resolve, reject) => {
+            gm(buffer).write(path, err => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(path);
+                }
+            });
+        });
     }
 
     /**
@@ -100,7 +140,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     applyFilter(buffer, mimetype, filter) {
-
         if (filter === 'blur') {
             return this.blur(buffer, 5, 2);
         }
@@ -168,7 +207,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     write(buffer, text, width = 0, height = 0, position = 'Center', color = '#ffffff', fontSize = 30) {
-
         return new Promise((resolve, reject) => {
 
             if (text === '' || text === null) {
@@ -188,8 +226,7 @@ class ImageEditor {
                     } else {
                         resolve(buffer);
                     }
-                })
-            ;
+                });
         });
     }
 
@@ -205,7 +242,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     resize(buffer, width, height = null, option = null) {
-
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .resize(width, height, option)
@@ -234,7 +270,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     crop(buffer, width, height, gravity = 'Center', x = 0, y = 0) {
-
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .gravity(gravity)
@@ -261,7 +296,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     blur(buffer, radius, sigma) {
-
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .blur(radius, sigma)
@@ -285,7 +319,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     mono(buffer) {
-
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .monochrome()
@@ -309,7 +342,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     sepia(buffer) {
-
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .sepia()
@@ -333,7 +365,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     mosaic(buffer) {
-
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .mosaic()
@@ -357,7 +388,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     negative(buffer) {
-
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .negative()
@@ -382,7 +412,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     paint(buffer, radius) {
-
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .paint(radius)
@@ -408,7 +437,6 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     pixelate(buffer, mimetype, size) {
-
         return new Promise((resolve, reject) => {
             jimp.read(buffer).then(image => {
                 image.pixelate(size).getBuffer(mimetype, (err, buffer) => {
@@ -423,4 +451,4 @@ class ImageEditor {
     }
 }
 
-module.exports = new ImageFactory();
+module.exports = new ImageEditor();

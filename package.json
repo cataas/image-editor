@@ -17,7 +17,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "doc": "node_modules/.bin/jsdoc2md index.js > docs/documentations.md",
+    "doc": "node_modules/.bin/jsdoc2md index.js > ./documentations.md",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "author": "Kevin Balicot <kevinbalicot@gmail.com>",
