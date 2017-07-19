@@ -13,6 +13,10 @@ ie.readFile('./input.png')
     .then(() => console.log('Done'));
 ```
 
+## Dependencies
+
+Like [gm](https://www.npmjs.com/package/gm) library, you need install `GraphicsMagick` on your computer.
+
 # API Reference
 
 ## ImageEditor

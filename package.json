@@ -13,6 +13,7 @@
     "yion": "^1.0.0"
   },
   "devDependencies": {
+    "conventional-changelog-cli": "^1.3.2",
     "jsdoc-to-markdown": "^3.0.0"
   },
   "scripts": {
