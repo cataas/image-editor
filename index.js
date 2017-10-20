@@ -14,7 +14,7 @@ const jimp = require('jimp');
 class ImageEditor {
 
     constructor() {
-        this.font = 'Arial';
+        this.font = __dirname + '/fonts/impact.ttf';
     }
 
     /**
