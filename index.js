@@ -28,14 +28,15 @@ class ImageEditor {
      * @param {string} [filter=null]
      * @param {number} [customWidth=null]
      * @param {number} [customHeight=null]
+     * @param {string} [gravity=null]
      *
      * @returns {Promise}
      *
      * @alias module:ImageEditor
      */
-    edit(buffer, mimetype, type = 'default', text = '', color = '#ffffff', fontSize = 30, filter = null, customWidth = null, customHeight = null) {
+    edit(buffer, mimetype, type = 'default', text = '', color = '#ffffff', fontSize = 30, filter = null, customWidth = null, customHeight = null, gravity = null) {
 
-        return this.applyType(buffer, mimetype, type, customWidth, customHeight)
+        return this.applyType(buffer, mimetype, type, customWidth, customHeight, gravity)
             .then(buffer => this.applyFilter(buffer, mimetype, filter))
             .then(buffer => this.size(buffer))
             .then(data => {
@@ -94,16 +95,32 @@ class ImageEditor {
      * @param {string} [type=default]
      * @param {number} [customWidth=null]
      * @param {number} [customHeight=null]
+     * @param {string} [gravity=null]
      *
      * @returns {Promise}
      *
      * @alias module:ImageEditor
      */
-    applyType(buffer, mimetype, type = 'default', customWidth = null, customHeight = null) {
+    applyType(buffer, mimetype, type = 'default', customWidth = null, customHeight = null, gravity = null) {
 
         if (type === 'sq' || type === 'square') {
-            let gravity = mimetype === 'image/gif' ? 'NorthWest' : 'Center';
-            return this.resize(buffer, 200, '200^').then(buffer => this.crop(buffer, 200, '200^', gravity));
+            let width = 200;
+            let height = '200^';
+
+            if (customWidth !== null && customHeight !== null) {
+                width = customWidth;
+                height = customHeight + '^';
+            } else if (customWidth !== null) {
+                width = customWidth;
+                height = customWidth + '^';
+            }
+
+            if (null === gravity) {
+                gravity = mimetype === 'image/gif' ? 'TopLeft' : 'Center';
+            }
+
+            return this.resize(buffer, width, height)
+                .then(buffer => this.crop(buffer, width, height, gravity));
         }
 
         if (type === 'md' || type === 'medium') {
@@ -123,7 +140,8 @@ class ImageEditor {
         }
 
         if (customWidth !== null || customHeight !== null) {
-            return this.resize(buffer, customWidth, customHeight);
+            const option = customWidth !== null && customHeight !== null ? '!' : null;
+            return this.resize(buffer, customWidth, customHeight, option);
         }
 
         return this.resize(buffer, 600);
@@ -270,6 +288,21 @@ class ImageEditor {
      * @alias module:ImageEditor
      */
     crop(buffer, width, height, gravity = 'Center', x = 0, y = 0) {
+
+        const gravities = {
+            'topright': 'NorthWest',
+            'top': 'North',
+            'topleft': 'NorthWest',
+            'left': 'West',
+            'center': 'Center',
+            'right': 'East',
+            'bottomleft': 'SouthWest',
+            'bottom': 'South',
+            'bottomright': 'SouthEast'
+        };
+
+        gravity = !!gravities[String(gravity).toLowerCase()] ? gravities[String(gravity).toLowerCase()] : 'Center';
+
         return new Promise((resolve, reject) => {
             gm(buffer)
                 .gravity(gravity)

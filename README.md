@@ -22,7 +22,7 @@ Like [gm](https://www.npmjs.com/package/gm) library, you need install `GraphicsM
 ## ImageEditor
 
 * ImageEditor
-    * ImageEditor#edit(buffer, mimetype, [type], [text], [color], [fontSize], [filter], [customWidth], [customHeight]) => <code>Promise</code>
+    * ImageEditor#edit(buffer, mimetype, [type], [text], [color], [fontSize], [filter], [customWidth], [customHeight], [gravity]) => <code>Promise</code>
     * ImageEditor#readFile(path) => <code>Promise</code>
     * ImageEditor#writeFile(buffer, path) => <code>Promise</code>
     * ImageEditor#applyType(buffer, mimetype, [type], [customWidth], [customHeight]) => <code>Promise</code>
